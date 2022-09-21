@@ -1,0 +1,5 @@
+0 - fazer um site de tarefas
+
+1 - criar os campos de input das entregas
+
+2 - enviar para o back
