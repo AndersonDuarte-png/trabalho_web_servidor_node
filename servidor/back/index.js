@@ -1,8 +1,8 @@
 const http = require('http');
-const {onGet, onPost, onPut} = require('./requests')
+const {onGet, onPost, onPut, Delete} = require('./requests')
 
 const hostname = '127.0.0.1';
-const port = 373737;
+const port = 3737;
 
 const headersCors = {
     'Access-Control-Allow-Origin': '*',
@@ -34,6 +34,13 @@ const server = http.createServer(async(res,req) =>{
             res.writeHead(200, headers);
             res.end(resultado);
             break;
+        
+        case "DELETE":
+            resultado = await Delete(req);
+            res.writeHead(200, headers);
+            res.end(resultado);
+            break;
+        
         default:      
             res.writeHead(405, headers)
             res.end(`${req.method} não é aceito por este servidor`)
