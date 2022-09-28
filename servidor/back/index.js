@@ -6,7 +6,7 @@ const port = 3737;
 
 const headersCors = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'PUT, POST, GET',
+    'Access-Control-Allow-Methods': 'OPTIONS, PUT, POST, GET, DELETE',
     "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
 }
 

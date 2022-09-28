@@ -1,32 +1,28 @@
 const url = require('url')
-const {new_nota,criar_nota,alterar_nota,excluir_nota} = require('./acao_lista')
+const {textoToNumber, retornar_nota,adicionar_nota,alterar_nota,excluir_nota} = require('./acao_lista')
 
 const onGet = (req) =>{
     const urlObjeto = url.parse(req.url, true);
-    var nota = new_nota(urlObjeto.query.nota)
-
-    return criar_nota(nota).toString()
+    var id_nota =textoToNumber(urlObjeto.query.id_nota)
+    return retornar_nota(id_nota).toString()
 }
 
 const onPost = async (req) =>{
     let body = await obterBody(req)
-    var nota = new_nota(body.nota)
-    return alterar_nota(nota).toString()
+    return adicionar_nota(body).toString()
     
 }
 
 
 const onPut = async (req) =>{
     let body = await obterBody(req)
-    var nota = new_nota(body.nota)
-    return alterar_nota(nota).toString()
+    return alterar_nota(body,body["id"]).toString()
     
 }
 
 const Delete = async (req) =>{
     let body = await obterBody(req)
-    var nota = new_nota(body.nota)
-    return excluir_nota(nota).toString()
+    return excluir_nota(body).toString()
 }
 
 const obterBody = (req) => new Promise((resolve) => {
