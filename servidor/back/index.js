@@ -1,52 +1,49 @@
-const http = require('http');
-const {onGet, onPost, onPut, Delete} = require('./requests')
+const http = require("http");
+const express = require("express");
+const app = express();
+const bp = require('body-parser')
 
-const hostname = '127.0.0.1';
-const port = 3737;
+app.use(bp.json())
+app.use(bp.urlencoded({ extended: true }))
 
-const headersCors = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'OPTIONS, PUT, POST, GET, DELETE',
-    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+var ID = 0;
+var lista_tarefas = []
+
+const corpo_lista_tarefa = {
+    id: gerar_new_id(),
+    titulo:"titulo novo",
+    descricao:"descricao",
+    complete: false
+
 }
 
-const headers = {
-    ...headersCors,
-    'Content-Type': 'text/plain'
+//criar_tarefa(tarefa)
+
+function gerar_new_id (){
+    return ID += 1
 }
 
-const server = http.createServer(async(res,req) =>{
-    let resultado = ""
-    switch(res.method){
-        case "GET":
-            resultado = onGet(req);
-            res.writeHead(200, headers);
-            res.end(resultado);
-            break;
-        case "POST":
-            resultado = await onPost(req);
-            res.writeHead(200, headers);
-            res.end(resultado);
-            break;
+function criar_tarefa(tarefa){
+    let nova_tarefa = {...tarefa, id: gerar_new_id(),complete: false}
+    lista_tarefas.push(nova_tarefa)
+}
 
-        case "PUT":
-            resultado = await onPut(req);
-            res.writeHead(200, headers);
-            res.end(resultado);
-            break;
-        
-        case "DELETE":
-            resultado = await Delete(req);
-            res.writeHead(200, headers);
-            res.end(resultado);
-            break;
-        
-        default:      
-            res.writeHead(405, headers)
-            res.end(`${req.method} não é aceito por este servidor`)
-    }
+
+
+function trazerListaTarefa (){
+    return lista_tarefas
+}
+
+app.get("/lista", (req, res) => {
+    let lista = trazerListaTarefa()
+    res.status(200).json({status: 'ok', lista});
 });
 
-server.listen(port, hostname, () => {
-    console.log(`O server está rodando na URL: http://${hostname}:${port}/`);
+app.post("/inserir_lista", (req, res) => {
+    console.log(req.body)
+    let lista = trazerListaTarefa()
+    res.status(200).json({status: 'ok', lista});
 });
+
+
+http.createServer(app).listen(3000, () => console.log("Servidor rodando local na porta 3000"));
